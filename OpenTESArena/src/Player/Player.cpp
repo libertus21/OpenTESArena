@@ -470,9 +470,6 @@ void Player::rotateX(Degrees deltaX)
 		).normalized();
 		
 		this->up = this->right.cross(this->forward).normalized();
-
-		DebugLogFormat("Rotacion X - Angulos: X=%.2f, Y=%.2f", this->angleX, this->angleY);
-		DebugLogFormat("Vectores - Forward: (%.2f, %.2f, %.2f)", this->forward.x, this->forward.y, this->forward.z);
 	}
 }
 
@@ -502,9 +499,6 @@ void Player::rotateY(Degrees deltaY, Degrees pitchLimit)
 		).normalized();
 		
 		this->up = this->right.cross(this->forward).normalized();
-
-		DebugLogFormat("Rotacion Y - Angulos: X=%.2f, Y=%.2f", this->angleX, this->angleY);
-		DebugLogFormat("Vectores - Forward: (%.2f, %.2f, %.2f)", this->forward.x, this->forward.y, this->forward.z);
 	}
 }
 
