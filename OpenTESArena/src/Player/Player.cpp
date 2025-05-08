@@ -448,28 +448,32 @@ bool Player::isMoving() const
 
 void Player::rotateX(Degrees deltaX)
 {
+	const Degrees oldAngleX = this->angleX;
 	this->angleX = std::fmod(this->angleX + deltaX, 360.0);
 	if (this->angleX < 0.0) this->angleX += 360.0;
 	
-	const Radians angleXRad = MathUtils::degToRad(this->angleX);
-	const Radians angleYRad = MathUtils::degToRad(this->angleY);
-	
-	this->forward = Double3(
-		std::cos(angleYRad) * std::sin(angleXRad),
-		-std::sin(angleYRad),
-		std::cos(angleYRad) * std::cos(angleXRad)
-	).normalized();
-	
-	this->right = Double3(
-		std::cos(angleXRad),
-		0.0,
-		-std::sin(angleXRad)
-	).normalized();
-	
-	this->up = this->right.cross(this->forward).normalized();
+	if (oldAngleX != this->angleX)
+	{
+		const Radians angleXRad = MathUtils::degToRad(this->angleX);
+		const Radians angleYRad = MathUtils::degToRad(this->angleY);
+		
+		this->forward = Double3(
+			std::cos(angleYRad) * std::sin(angleXRad),
+			-std::sin(angleYRad),
+			std::cos(angleYRad) * std::cos(angleXRad)
+		).normalized();
+		
+		this->right = Double3(
+			std::cos(angleXRad),
+			0.0,
+			-std::sin(angleXRad)
+		).normalized();
+		
+		this->up = this->right.cross(this->forward).normalized();
 
-	DebugLogFormat("Rotación X - Ángulos: X=%.2f°, Y=%.2f°", this->angleX, this->angleY);
-	DebugLogFormat("Vectores - Forward: (%.2f, %.2f, %.2f)", this->forward.x, this->forward.y, this->forward.z);
+		DebugLogFormat("Rotacion X - Angulos: X=%.2f, Y=%.2f", this->angleX, this->angleY);
+		DebugLogFormat("Vectores - Forward: (%.2f, %.2f, %.2f)", this->forward.x, this->forward.y, this->forward.z);
+	}
 }
 
 void Player::rotateY(Degrees deltaY, Degrees pitchLimit)
@@ -477,27 +481,31 @@ void Player::rotateY(Degrees deltaY, Degrees pitchLimit)
 	DebugAssert(pitchLimit >= 0.0);
 	DebugAssert(pitchLimit < 90.0);
 	
+	const Degrees oldAngleY = this->angleY;
 	this->angleY = std::clamp(this->angleY + deltaY, -90.0 + pitchLimit, 90.0 - pitchLimit);
 	
-	const Radians angleXRad = MathUtils::degToRad(this->angleX);
-	const Radians angleYRad = MathUtils::degToRad(this->angleY);
-	
-	this->forward = Double3(
-		std::cos(angleYRad) * std::sin(angleXRad),
-		-std::sin(angleYRad),
-		std::cos(angleYRad) * std::cos(angleXRad)
-	).normalized();
-	
-	this->right = Double3(
-		std::cos(angleXRad),
-		0.0,
-		-std::sin(angleXRad)
-	).normalized();
-	
-	this->up = this->right.cross(this->forward).normalized();
+	if (oldAngleY != this->angleY)
+	{
+		const Radians angleXRad = MathUtils::degToRad(this->angleX);
+		const Radians angleYRad = MathUtils::degToRad(this->angleY);
+		
+		this->forward = Double3(
+			std::cos(angleYRad) * std::sin(angleXRad),
+			-std::sin(angleYRad),
+			std::cos(angleYRad) * std::cos(angleXRad)
+		).normalized();
+		
+		this->right = Double3(
+			std::cos(angleXRad),
+			0.0,
+			-std::sin(angleXRad)
+		).normalized();
+		
+		this->up = this->right.cross(this->forward).normalized();
 
-	DebugLogFormat("Rotación Y - Ángulos: X=%.2f°, Y=%.2f°", this->angleX, this->angleY);
-	DebugLogFormat("Vectores - Forward: (%.2f, %.2f, %.2f)", this->forward.x, this->forward.y, this->forward.z);
+		DebugLogFormat("Rotacion Y - Angulos: X=%.2f, Y=%.2f", this->angleX, this->angleY);
+		DebugLogFormat("Vectores - Forward: (%.2f, %.2f, %.2f)", this->forward.x, this->forward.y, this->forward.z);
+	}
 }
 
 void Player::lookAt(const WorldDouble3 &targetPosition)
